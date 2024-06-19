@@ -1,0 +1,9 @@
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d',{alpha:false});
+const colums = 40;
+const rows = 18;
+const blockSize = 15;
+const cw = colums*blockSize //canvas width
+const ch = rows*blockSize //canvas height
+canvas.width = cw;
+canvas.height = ch
