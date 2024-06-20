@@ -23,27 +23,29 @@ let count = 0;
 loop();
 
 function loop(){
-    init.estate = 1; 
-    let next = init.choseNeighbor(labyrinthRows,path)
-
-    let minX = Math.min(init.x,next.x);
-    let minY = Math.min(init.y,next.y);
-    let MaX = Math.max(init.x, next.x);
-    let MaY = Math.max(init.y, next.y);
-    ctx.fillStyle = "orange"
-    ctx.fillRect(5+minX*15, 5+minY*15,5+(MaX-minX)*15,5+(MaY-minY)*15);
-    
-    init = next;
-
+    //ctx.clearRect(0,0,cw,ch);
     drawCells();    
+    init.estate = 1; 
+    let next = init.choseNeighbor(path);
+    if(Cell.paint){
+        init.next = next;
+        ctx.fillStyle = "orange"
+        ctx.fillRect(5+init.x*15,5+init.y*15,5,5);
+    }
+   // drawCells()
+    init = next;
     requestAnimationFrame(loop);
 }
 
 function drawCells(){ //Draw Active Cells
     labyrinthRows.forEach((row,y) =>{ row.forEach((cell,x) =>{
-        if(cell.estate != 0){
+        let minX = Math.min(cell.x,cell.next.x);
+        let minY = Math.min(cell.y,cell.next.y);
+        let MaX = Math.max(cell.x, cell.next.x);
+        let MaY = Math.max(cell.y, cell.next.y);
+        if(cell.estate == 1){
             ctx.fillStyle = "green"
-            ctx.fillRect(5+x*15,5+y*15,5,5);
+            ctx.fillRect(5+minX*15, 5+minY*15,5+(MaX-minX)*15,5+(MaY-minY)*15);
         }
     })})
 }

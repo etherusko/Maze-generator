@@ -1,9 +1,11 @@
 export class Cell{
+    static paint = true;
     constructor(x,y){
         this.x = x;
         this.y = y;
         this.estate = 0;
         this.neighbors = [];
+        this.next = '';
     }
     initNeighbors(arr=[],x,y){
         let n = [];
@@ -25,7 +27,7 @@ export class Cell{
         }
         return n;
     }
-    choseNeighbor(arr,path){
+    choseNeighbor(path){
         let numOfN = this.neighbors.length;
         if(numOfN>0){
             let n = Math.floor(Math.random()*numOfN)
@@ -33,14 +35,17 @@ export class Cell{
                 path.push(this.neighbors[n]);
                 this.neighbors[n].estate = 1
                 let neighbor = this.neighbors[n];
-                
+                Cell.paint = true;
                 this.neighbors.splice(n,1);
                 return neighbor;
             }else{
                 this.neighbors.splice(n,1);
-                return path.pop();
+                return this.choseNeighbor(path);
             }            
-        }else return path.pop();
+        }else{
+            Cell.paint=false;
+            return path.pop();
+        }
     }
 
 }
