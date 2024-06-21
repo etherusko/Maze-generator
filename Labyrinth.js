@@ -1,12 +1,10 @@
 import { Cell } from "./Cell.js";
 export class Labyrinth{
     constructor(rows, cols){
-        this.Rows = rows;
-        this.Cols = cols
-        this.cellsArray = this.#initCellsArray(cols,rows);
+        this.cellsArray = this.#initCellsArray(rows,cols);
         this.#initNeighbors(this.cellsArray);
     }
-    #initCellsArray(cols,rows){
+    #initCellsArray(rows,cols){
         let arr = [];
         for(let y = 0; y<rows; y++){
             arr[y] = [];
@@ -18,7 +16,7 @@ export class Labyrinth{
     }
     #initNeighbors(arr){
         arr.forEach((row,y) => row.forEach((cell,x) => {
-            cell.neighbors = cell.initNeighbors(arr,x,y);
-        }));
+            cell.initNeighbors(arr,x,y);
+        }))
     }
 }

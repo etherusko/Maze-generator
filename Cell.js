@@ -1,5 +1,4 @@
 export class Cell{
-    static paint = true;
     constructor(x,y){
         this.x = x;
         this.y = y;
@@ -9,43 +8,33 @@ export class Cell{
     }
     initNeighbors(arr=[],x,y){
         let n = [];
-        if(0<y && y<arr.length-1){
-            n.push(arr[y+1][x]);
-            n.push(arr[y-1][x]);
-        }else if(y == 0){
-            n.push(arr[y+1][x]);
-        }else{
-            n.push(arr[y-1][x]);
-        }
-        if(0<x && x<arr[0].length-1){
-            n.push(arr[y][x+1]);
-            n.push(arr[y][x-1]);
-        }else if(x == 0){
-            n.push(arr[y][x+1]);
-        }else{
-            n.push(arr[y][x-1]);
-        }
-        return n;
+        if(y+1 < arr.length) n.push(arr[y+1][x]);
+        if(y-1 >= 0) n.push(arr[y-1][x]);
+        if(x+1<arr[0].length) n.push(arr[y][x+1]);
+        if(x-1>=0) n.push(arr[y][x-1]);
+        this.neighbors = n;
     }
     choseNeighbor(path){
         let numOfN = this.neighbors.length;
         if(numOfN>0){
             let n = Math.floor(Math.random()*numOfN)
             if(this.neighbors[n].estate == 0){
-                path.push(this.neighbors[n]);
-                this.neighbors[n].estate = 1
-                let neighbor = this.neighbors[n];
-                Cell.paint = true;
+                this.next = this.neighbors[n];
+                path.push(this.next);
                 this.neighbors.splice(n,1);
-                return neighbor;
+                return this.next;
             }else{
                 this.neighbors.splice(n,1);
                 return this.choseNeighbor(path);
             }            
+        }
+        return path.pop();
+    }
+    minMax(i){
+        if(i=='x'){
+            return [Math.min(this.x,this.next.x),Math.max(this.x,this.next.x)];
         }else{
-            Cell.paint=false;
-            return path.pop();
+            return [Math.min(this.y,this.next.y),Math.max(this.y,this.next.y)]
         }
     }
-
 }
