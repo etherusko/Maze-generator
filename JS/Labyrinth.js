@@ -15,8 +15,8 @@ export class Labyrinth{
         return arr;
     }
     #initNeighbors(arr){
-        arr.forEach((row,y) => row.forEach((cell,x) => {
-            cell.initNeighbors(arr,x,y);
+        arr.forEach(row => row.forEach(cell => {
+            cell.initNeighbors(arr, cell.x, cell.y);
         }))
     }
 }
