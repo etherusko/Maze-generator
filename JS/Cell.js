@@ -4,9 +4,7 @@ export class Cell{
         this.y = y;
         this.estate = 0;
         this.neighbors = {
-            array : [
-                ['up',false],['down',false],['rigth',false],['left',false]
-            ],
+            array : [],
             connections : {
                 'up': false,
                 'down': false,
@@ -39,22 +37,25 @@ export class Cell{
         }
         return path.pop();
     }
-    minMax(i){
-        if(i=='x'){
-            return [Math.min(this.x,this.next.x),Math.max(this.x,this.next.x)];
-        }else{
-            return [Math.min(this.y,this.next.y),Math.max(this.y,this.next.y)]
-        }
-    }
     addConection(){
         if(this.x-this.next.x != 0){
-            (this.x > this.next.x) ? 
-            this.neighbors.connections['left'] = true : 
-            this.neighbors.connections['rigth'] = true;
+            if(this.x > this.next.x){
+                this.neighbors.connections['left'] = true;
+                 this.next.neighbors.connections['rigth'] = true;
+            }
+            else{
+                this.neighbors.connections['rigth'] = true;
+                this.next.neighbors.connections['left'] = true;
+            }
+
         }else{
-            (this.y > this.next.y) ? 
-            this.neighbors.connections['down'] = true : 
-            this.neighbors.connections['up'] = true;
+            if(this.y > this.next.y){
+                this.neighbors.connections['down'] = true;
+                this.next.neighbors.connections['up'] = true;
+            }else{
+                this.neighbors.connections['up'] = true;
+                this.next.neighbors.connections['down'] = true;
+            }
         }
     }
 }
