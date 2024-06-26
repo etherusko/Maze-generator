@@ -33,9 +33,14 @@ function createLabyrinth(d=''){
 function drawCells(){ //Draw Active Cells
     labyrinthRows.forEach(row =>{row.forEach(cell =>{
         let dir = cell.neighbors.connections;
-        let connectionsArray = Object.values(dir);
         let connectionsOn = 0;
-        connectionsArray.forEach(bool =>{ if(bool) connectionsOn++;});
+        Object.values(dir).forEach(bool => connectionsOn += bool);
+        if(pointer === cell){
+            console.log(dir);
+            console.log(Object.values(dir));
+            console.log(Object.values(dir).map(e => e ? 1 : 0 ).join(''));
+        }
+        chooseImage(Object.values(dir).map(e => e ? 1 : 0 ).join(''))
         if(connectionsOn == 4){
             ctx.drawImage(imgArray[3],cell.x*blockSize,cell.y*blockSize);
         }else if(connectionsOn == 3){
@@ -124,4 +129,44 @@ function proof(){
     ctx.resetTransform(); 
     c+=5;
     requestAnimationFrame(proof);
+}
+function chooseImage(n = '0000'){
+    switch(n){
+        case '0001':
+            break;
+        case '0010':
+            break;
+        case '0011':
+            break;
+        case '0100':
+            break;
+        case '0101':
+            break;
+        case '0110':
+            break;
+        case '0111':
+            break;
+        case '1000':
+            break;
+        case '1001':
+            break;
+        case '1010':
+            break;
+        case '1011':
+            break;
+        case '1100':
+            break;
+        case '1101':
+            break;
+        case '1110':
+            break;
+        case '1111':
+            break;
+    }
+}
+function evalCondition(rotation=0, imgIndex=0, cell){
+    ctx.translate(cell.x*blockSize+blockSize/2,cell.y*blockSize+blockSize/2);
+    ctx.rotate(90*rotation*Math.PI/180);
+    ctx.drawImage(imgArray[imgIndex],-blockSize/2,-blockSize/2);
+    ctx.resetTransform();
 }
