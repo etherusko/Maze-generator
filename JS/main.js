@@ -1,28 +1,22 @@
 import { Labyrinth } from "./Labyrinth.js";
-const canvas = document.querySelector('canvas');
+export const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d',{alpha:false});
-const colums = 40;  
-const rows = 25;
+const colums = 25;  
+const rows = 15;
 const blockSize = 32;
-const cw = colums*blockSize //canvas width
-const ch = rows*blockSize //canvas height
-canvas.width = cw;
-canvas.height = ch;
+canvas.width = colums*blockSize //canvas width
+canvas.height = rows*blockSize //canvas height
 const laberinto = new Labyrinth(rows,colums);
-const labyrinthRows = laberinto.cellsArray;
 let imgArray = loadImages();
 let c = 0;
 let path = []
-let pointer = labyrinthRows[0][0];
+let pointer = laberinto.cellsArray[0][0];
 path.push(pointer);
 loop();
 //createLabyrinthFast();
-//proof();
 
 function loop(){
-    ctx.clearRect(0,0,cw,ch); 
     (path.length>0) ? createLabyrinth('draw') : console.log("laberinto terminado");
-    drawCells();
     requestAnimationFrame(loop);
 }
 function createLabyrinth(d=''){
@@ -31,62 +25,34 @@ function createLabyrinth(d=''){
     if(d === 'draw') drawCells();
 }
 function drawCells(){ //Draw Active Cells
-    labyrinthRows.forEach(row =>{row.forEach(cell =>{
+    ctx.clearRect(0,0,canvas.width,canvas.height); 
+    laberinto.cellsArray.forEach(row =>{row.forEach(cell =>{
         let dir = cell.neighbors.connections;
         let connectionsOn = 0;
         Object.values(dir).forEach(bool => connectionsOn += bool);
-        if(pointer === cell){
-            console.log(dir);
-            console.log(Object.values(dir));
-            console.log(Object.values(dir).map(e => e ? 1 : 0 ).join(''));
-        }
-        chooseImage(Object.values(dir).map(e => e ? 1 : 0 ).join(''))
         if(connectionsOn == 4){
-            ctx.drawImage(imgArray[3],cell.x*blockSize,cell.y*blockSize);
+            evalCondition(0,3,cell);
         }else if(connectionsOn == 3){
-            if(!dir['up']){
-                ctx.drawImage(imgArray[2],cell.x*blockSize,cell.y*blockSize);
-            }else
-            ctx.translate(cell.x*blockSize+blockSize/2,cell.y*blockSize+blockSize/2)
-            if(!dir['down']) ctx.rotate(180*Math.PI/180);
-            else if(!dir['left']) ctx.rotate(90*Math.PI/180);
-            else if(!dir['rigth']) ctx.rotate(270*Math.PI/180);
-            ctx.drawImage(imgArray[2],-blockSize/2,-blockSize/2);
-            ctx.resetTransform();
+            if(!dir['up'])evalCondition(0,2,cell);
+            else if(!dir['down']) evalCondition(2,2,cell);
+            else if(!dir['left']) evalCondition(1,2,cell);
+            else if(!dir['rigth']) evalCondition(3,2,cell);
         }else if(connectionsOn == 2){
-            if(dir['up']*dir['down']) ctx.drawImage(imgArray[1],cell.x*blockSize,cell.y*blockSize);
-            else if(dir['down']*dir['rigth']) ctx.drawImage(imgArray[4],cell.x*blockSize,cell.y*blockSize);
-            else{
-                ctx.translate(cell.x*blockSize+blockSize/2,cell.y*blockSize+blockSize/2)
-                if(dir['rigth']*dir['left']){
-                    ctx.rotate(90*Math.PI/180);
-                    ctx.drawImage(imgArray[1],-blockSize/2,-blockSize/2);
-                }else{
-                    if(dir['rigth']*dir['up']) ctx.rotate(90*Math.PI/180);
-                    else if(dir['left']*dir['up']) ctx.rotate(180*Math.PI/180);
-                    else if(dir['left']*dir['down']) ctx.rotate(270*Math.PI/180);
-                    ctx.drawImage(imgArray[4],-blockSize/2,-blockSize/2);
-                }
-                ctx.resetTransform();
-            }
+            if(dir['up']*dir['down']) evalCondition(0,1,cell);
+            else if(dir['down']*dir['rigth']) evalCondition(0,4,cell);
+            else if(dir['rigth']*dir['left']) evalCondition(1,1,cell);
+            else if(dir['rigth']*dir['up']) evalCondition(1,4,cell);
+            else if(dir['left']*dir['up']) evalCondition(2,4,cell);
+            else if(dir['left']*dir['down']) evalCondition(3,4,cell);
         }else if(connectionsOn == 1){
-            if(dir['down'])ctx.drawImage(imgArray[0],cell.x*blockSize,cell.y*blockSize);
-            else{
-                ctx.translate(cell.x*blockSize+blockSize/2,cell.y*blockSize+blockSize/2)
-            if(dir['rigth']) ctx.rotate(90*Math.PI/180);
-            else if(dir['up']) ctx.rotate(180*Math.PI/180);
-            else if(dir['left']) ctx.rotate(270*Math.PI/180);
-            ctx.drawImage(imgArray[0],-blockSize/2,-blockSize/2);
-            ctx.resetTransform();
-            }
+            if(dir['down']) evalCondition(0,0,cell);
+            else if(dir['rigth']) evalCondition(1,0,cell);
+            else if(dir['up']) evalCondition(2,0,cell);
+            else if(dir['left']) evalCondition(3,0,cell);
         }
     })})
-}
-function createLabyrinthFast(){
-    while(path.length>0){createLabyrinth()}
-    imgArray[imgArray.length-1].onload = function(){
-        drawCells();
-    }
+        ctx.fillStyle = 'rgba(240, 232, 240, 0.521)'
+        ctx.fillRect(pointer.x*blockSize,pointer.y*blockSize,blockSize,blockSize);
 }
 function loadImages(){
     let imgArray = [];
@@ -100,73 +66,23 @@ function loadImages(){
     imgArray.push(img);
     return imgArray;
 }
-function proof(){
-    ctx.clearRect(0,0,cw*2,ch*2)
-    let cont = 0;
-    labyrinthRows.forEach(row => row.forEach(cell =>{
-        ctx.translate(cell.x*blockSize+blockSize/2,cell.y*blockSize+blockSize/2);
-        if(cont%2 == 0){
-            ctx.rotate(-c*Math.PI/180);
-            ctx.fillStyle = "blue";
-            ctx.fillRect(-blockSize/2,-blockSize/2,blockSize-5,blockSize-5);
-        }else{
-            ctx.rotate(c*Math.PI/180);
-            ctx.fillStyle = 'red';
-            //ctx.fillRect(cell.x*blockSize,cell.y*blockSize,blockSize,blockSize);
-            ctx.fillRect(-blockSize/2,-blockSize/2,blockSize-5,blockSize-5);
-        }
-        ctx.resetTransform();
-        console.log(cont);
-            cont++
-    }))
-    ctx.fillStyle = "blue";
-    ctx.fillRect(200,200,200,200);
-    ctx.fillStyle = "red";
-    ctx.translate(510,300);
-    ctx.rotate(c * Math.PI / 180);
-    //ctx.fillRect(410,200,200,200);
-    ctx.fillRect(-100,-100,200,200);
-    ctx.resetTransform(); 
-    c+=5;
-    requestAnimationFrame(proof);
-}
-function chooseImage(n = '0000'){
-    switch(n){
-        case '0001':
-            break;
-        case '0010':
-            break;
-        case '0011':
-            break;
-        case '0100':
-            break;
-        case '0101':
-            break;
-        case '0110':
-            break;
-        case '0111':
-            break;
-        case '1000':
-            break;
-        case '1001':
-            break;
-        case '1010':
-            break;
-        case '1011':
-            break;
-        case '1100':
-            break;
-        case '1101':
-            break;
-        case '1110':
-            break;
-        case '1111':
-            break;
-    }
-}
-function evalCondition(rotation=0, imgIndex=0, cell){
+function evalCondition(rotation, imgIndex, cell){
     ctx.translate(cell.x*blockSize+blockSize/2,cell.y*blockSize+blockSize/2);
     ctx.rotate(90*rotation*Math.PI/180);
     ctx.drawImage(imgArray[imgIndex],-blockSize/2,-blockSize/2);
     ctx.resetTransform();
+}
+function createLabyrinthFast(){
+    while(path.length>0){createLabyrinth()}
+    imgArray[imgArray.length-1].onload = function(){
+        drawCells();
+    }
+}
+export function btnReset(){
+    laberinto.initLabyrinth(rows,colums);
+    path = [];
+    pointer = laberinto.cellsArray[0][0];
+    path.push(pointer);
+    loop();
+
 }

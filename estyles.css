@@ -1,3 +1,6 @@
+    :root{
+        --canvasAspectRatio: 1.6
+    }
     body, h1{
         margin: 0;
     }
@@ -20,28 +23,73 @@
     }
     .main-container:nth-child(2){
         height: 73vh;
-        background-color: violet;   
+        background-color: #394534;
+        justify-content: space-between;
     }
     canvas{
-        flex: 3;
+        /*flex: 3;*/
         box-sizing: border-box;
         min-width: 0;
         max-height: 73vh;
-        max-width: calc((73vh* 600) / 270);
+        max-width: calc(73vh * var(--canvasAspectRatio));
+        margin: auto;
         padding: 1.5vw;
     }
     .options-interface{
-        flex: 1;
+        /*flex: 1;*/
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 94%;
-        background-color: rosybrown;
+        height: 100%;
+        background-color: #514b4b;
+        border-radius: 0 10% 10% 0;
         box-sizing: border-box;
         padding: 2vw;
-        margin: 0 1vw;
+        width: 10vw;
+        transition: width 0.5s ease;
+        /*margin: 0 1vw;*/
     }
+    .options-interface:hover{
+        width: 20%;
+    }
+    .options-interface:hover .options-setings{
+        opacity: 1;
+        width: 80%;
+        display: flex;
+    } 
     .main-container:nth-child(3){
         background-color: darkslategray;
         height: 12vh;
+    }
+    .options-setings{
+        background-color: #716c68;
+        display: none;
+        flex-direction: column;
+        border-radius: 24px;
+        padding: 1.5vw;
+        gap: 4vh;
+        width: -1px;
+        opacity: 0;
+        transition: opacity 0.5s ease, visibility 0.1s ease, width 0.1s ease;
+    }
+    .options-setings button{
+        padding: 4px;
+        /* border: 1px violet outset; */
+        border-radius: 8px;
+        width: 50%;
+        cursor: pointer;
+    }
+    .options-section{
+        display: flex;
+        flex-direction: column;
+    }
+    .options-section span{
+        margin-bottom: 0.5vh;
+        color: #faffb2;
+        font-size: large;
+    }
+    select{
+        border: 2px #67c5ac solid;
+        border-radius: 22px;
+        background-color: blanchedalmond;
     }

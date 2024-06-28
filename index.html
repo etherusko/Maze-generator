@@ -6,6 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="estyles.css">
     <script defer type="module" src="./JS/main.js"></script>
+    <script defer type="module" src="./JS/index.js"></script>
 </head>
 <body>
     <main>
@@ -14,7 +15,34 @@
         </header>
         <div class="main-container">
             <section class="options-interface">
-                <h2>Controls</h2>
+                <h2>Settings</h2>
+                <div class="options-setings">
+                    <div class="options-section">
+                        <span>Generative algorithm: </span>
+                        <select>
+                            <option>Backtracking Recursive</option>
+                            <option disabled>Wave Function Colapse</option>
+                        </select>
+                    </div>
+                    <div class="options-section">
+                        <span>generation:</span>
+                        <div>
+                            <label>
+                                fast
+                                <input type="radio" name="generation" value="fast generation">
+                            </label>
+                            <label>
+                                step-by-step
+                                <input type="radio" name="generation" value="step-by-step generation" checked>
+                            </label>
+                        </div>
+                    </div>
+                    <label class="options-section">
+                       <span>Speed:</span>
+                        <input type="range">
+                    </label>
+                    <button id="btn-generate">generate</button>
+                </div>
             </section>
             <canvas></canvas>
         </div>

@@ -1,8 +1,7 @@
 import { Cell } from "./Cell.js";
 export class Labyrinth{
     constructor(rows, cols){
-        this.cellsArray = this.#initCellsArray(rows,cols);
-        this.#initNeighbors(this.cellsArray);
+        this.initLabyrinth(rows,cols);
     }
     #initCellsArray(rows,cols){
         let arr = [];
@@ -18,5 +17,9 @@ export class Labyrinth{
         arr.forEach(row => row.forEach(cell => {
             cell.initNeighbors(arr, cell.x, cell.y);
         }))
+    }
+    initLabyrinth(r,c){
+        this.cellsArray = this.#initCellsArray(r,c);
+        this.#initNeighbors(this.cellsArray);
     }
 }
