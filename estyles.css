@@ -4,6 +4,10 @@
     body, h1{
         margin: 0;
     }
+    h2{
+        font-size: min(5.5vh, 1.5em);
+        margin: 1vh;
+    }
     main{
         background-color: darkolivegreen;
         display: flex;
@@ -45,31 +49,28 @@
         border-radius: 0 10% 10% 0;
         box-sizing: border-box;
         padding: 2vw;
-        width: 10vw;
         transition: width 0.5s ease;
-        /*margin: 0 1vw;*/
     }
-    .options-interface:hover{
-        width: 20%;
+    /*.options-interface:hover{
+        width: auto;
+        width: 25vw;
     }
     .options-interface:hover .options-setings{
         opacity: 1;
         width: 80%;
         display: flex;
-    } 
+    } */
     .main-container:nth-child(3){
         background-color: darkslategray;
         height: 12vh;
     }
     .options-setings{
         background-color: #716c68;
-        display: none;
+        display: flex;
         flex-direction: column;
         border-radius: 24px;
         padding: 1.5vw;
         gap: 4vh;
-        width: -1px;
-        opacity: 0;
         transition: opacity 0.5s ease, visibility 0.1s ease, width 0.1s ease;
     }
     .options-setings button{

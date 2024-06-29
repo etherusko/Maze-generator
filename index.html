@@ -19,7 +19,7 @@
                 <div class="options-setings">
                     <div class="options-section">
                         <span>Generative algorithm: </span>
-                        <select>
+                        <select name="algorithm-type">
                             <option>Backtracking Recursive</option>
                             <option disabled>Wave Function Colapse</option>
                         </select>
@@ -39,7 +39,7 @@
                     </div>
                     <label class="options-section">
                        <span>Speed:</span>
-                        <input type="range">
+                        <input type="range" id="speed-range" max="20" min="1" value="20">
                     </label>
                     <button id="btn-generate">generate</button>
                 </div>

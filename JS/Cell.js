@@ -5,14 +5,14 @@ export class Cell{
         this.estate = 0;
         this.neighbors = {
             array : [],
-            connections : {
-                'up': false,
-                'down': false,
-                'rigth': false,
-                'left': false
-            }
+            connections : 
+            [
+              false,  /*up*/
+              false,  /*rigth*/
+              false,  /*down*/
+              false,  /*left*/
+            ]
         }
-        this.next = '';
     }
     initNeighbors(arr=[],x,y){
         if(y+1 < arr.length)    this.neighbors.array.push(arr[y+1][x]);
@@ -20,42 +20,25 @@ export class Cell{
         if(x+1<arr[0].length)   this.neighbors.array.push(arr[y][x+1]);
         if(x-1>=0)              this.neighbors.array.push(arr[y][x-1]);
     }
-    choseNeighbor(path){
+    choseNeighbor(laberinto){
         let numOfN = this.neighbors.array.length;
         if(numOfN>0){
             let n = Math.floor(Math.random()*numOfN)
             if(this.neighbors.array[n].estate == 0){
-                this.next = this.neighbors.array[n];
-                path.push(this.next);
+                laberinto.pointer = this.neighbors.array[n];
+                laberinto.path.push(laberinto.pointer);
                 this.neighbors.array.splice(n,1);
-                this.addConection();
-                return this.next;
+                this.addConection(laberinto.pointer);
             }else{
                 this.neighbors.array.splice(n,1);
-                return this.choseNeighbor(path);
+                this.choseNeighbor(laberinto);
             }            
-        }
-        return path.pop();
+        }else laberinto.pointer = laberinto.path.pop();
     }
-    addConection(){
-        if(this.x-this.next.x != 0){
-            if(this.x > this.next.x){
-                this.neighbors.connections['left'] = true;
-                 this.next.neighbors.connections['rigth'] = true;
-            }
-            else{
-                this.neighbors.connections['rigth'] = true;
-                this.next.neighbors.connections['left'] = true;
-            }
-
-        }else{
-            if(this.y > this.next.y){
-                this.neighbors.connections['down'] = true;
-                this.next.neighbors.connections['up'] = true;
-            }else{
-                this.neighbors.connections['up'] = true;
-                this.next.neighbors.connections['down'] = true;
-            }
-        }
+    addConection(next){
+        let n = (this.x !== next.x) ?  (this.x < next.x) ? 1 : 3
+                                    :  (this.y < next.y) ? 0 : 2;
+        this.neighbors.connections[n] = true;
+        next.neighbors.connections[(n+2)%4] = true;
     }
 }
