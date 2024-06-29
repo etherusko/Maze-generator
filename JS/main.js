@@ -20,7 +20,7 @@ function loop(){
 function createLabyrinth(d=''){
     laberinto.pointer.estate = 1;
     laberinto.pointer.choseNeighbor(laberinto);
-    if(d === 'draw') laberinto.drawCells();
+    if(d === 'draw' && Labyrinth.images) laberinto.drawCells();
 }
 function createLabyrinthFast(){
     running = false

@@ -14,11 +14,11 @@ export class Labyrinth{
         let imgArray = [];
         for(let i=0; i<4; i++){
             let img = new Image();
-            img.src = `../Asets/${i+1}sides.png`;
+            img.src = `/Asets/${i+1}sides.png`;
             imgArray.push(img);
         }
         let img = new Image();
-        img.src = `../Asets/2sides-a.png`;
+        img.src = `/Asets/2sides-a.png`;
         imgArray.push(img);
         return imgArray;
     } 
